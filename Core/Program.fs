@@ -1,23 +1,31 @@
 ﻿open Microsoft.Xna.Framework
+open Microsoft.Xna.Framework.Graphics
 
 type SpaceEscapeGame() as this =
     inherit Game()
 
-    let graphics = new GraphicsDeviceManager(this)
+    let _ = new GraphicsDeviceManager(this)
 
-    override this.Initialize () =
+    let mutable spriteBatch = Unchecked.defaultof<_>
+
+    override _.Initialize () =
         this.IsMouseVisible <- true
 
         base.Initialize()
 
     override _.LoadContent () =
+        spriteBatch <- new SpriteBatch(this.GraphicsDevice)
         base.LoadContent()
 
     override _.Update gameTime =
         base.Update gameTime
     
-    override this.Draw gameTime =
+    override _.Draw gameTime =
         this.GraphicsDevice.Clear Color.CornflowerBlue
+
+        spriteBatch.Begin()
+
+        spriteBatch.End()
 
         base.Draw gameTime
 
