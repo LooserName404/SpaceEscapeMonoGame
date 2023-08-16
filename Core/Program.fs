@@ -1,5 +1,8 @@
 ﻿open Microsoft.Xna.Framework
 open Microsoft.Xna.Framework.Graphics
+open Garnet.Composition
+open SpaceEscape.Core.Commands
+open SpaceEscape.Core.Systems
 
 type SpaceEscapeGame() as this =
     inherit Game()
@@ -8,6 +11,8 @@ type SpaceEscapeGame() as this =
 
     let mutable spriteBatch = Unchecked.defaultof<_>
 
+    let world = Container()
+
     override _.Initialize () =
         this.IsMouseVisible <- true
 
@@ -15,6 +20,11 @@ type SpaceEscapeGame() as this =
 
     override _.LoadContent () =
         spriteBatch <- new SpriteBatch(this.GraphicsDevice)
+
+        Disposable.Create [
+            registerDraw world
+        ] |> ignore
+
         base.LoadContent()
 
     override _.Update gameTime =
@@ -24,6 +34,8 @@ type SpaceEscapeGame() as this =
         this.GraphicsDevice.Clear Color.CornflowerBlue
 
         spriteBatch.Begin()
+
+        world.Run { SpriteBatch = spriteBatch }
 
         spriteBatch.End()
 
